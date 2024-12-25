@@ -12,10 +12,19 @@ djangorestframework = "^3.15.2"
 markdown = "^3.7"
 django-filter = "^24.3"
 python-dotenv = "^1.0.1"
-flake8 = "^7.1.1"
 django-jazzmin = "^3.0.1"
+makefile = "^1.1.0"
+flake8 = "7.0.0"
+pyproject-flake8 = "^7.0.0"
+flake8-quotes = "^3.4.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.flake8]
+max-line-length = 79
+inline-quotes = "double"
+exclude = [".venv", ".git", "__pycache__", "migrations", "settings.py"]
+extend-ignore = ["E203"]
