@@ -31,6 +31,7 @@ from theatre.serializers import (
 )
 
 from theatre.permissions import IsAdminOrIfAuthenticatedReadOnly
+from theatre.pagination import CustomPagination
 
 
 class GenreViewSet(
@@ -38,9 +39,10 @@ class GenreViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
-    queryset = Genre.objects
+    queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    pagination_class = CustomPagination
 
 
 class ActorViewSet(
@@ -48,15 +50,17 @@ class ActorViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
-    queryset = Actor.objects
+    queryset = Actor.objects.all()
     serializer_class = ActorSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    pagination_class = CustomPagination
 
 
 class PlayViewSet(viewsets.ModelViewSet):
     queryset = Play.objects.prefetch_related("actors", "genres")
     serializer_class = PlaySerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    pagination_class = CustomPagination
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -67,9 +71,10 @@ class PlayViewSet(viewsets.ModelViewSet):
 
 
 class TheatreHallViewSet(viewsets.ModelViewSet):
-    queryset = TheatreHall.objects
+    queryset = TheatreHall.objects.all()
     serializer_class = TheatreHallSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    pagination_class = CustomPagination
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -83,6 +88,7 @@ class PerformanceViewSet(viewsets.ModelViewSet):
     queryset = Performance.objects.select_related("play", "theatre_hall")
     serializer_class = PerformanceSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    pagination_class = CustomPagination
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -96,6 +102,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.select_related("user")
     serializer_class = ReservationSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    pagination_class = CustomPagination
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -106,9 +113,10 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
 
 class TicketViewSet(viewsets.ModelViewSet):
-    queryset = Ticket.objects
+    queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    pagination_class = CustomPagination
 
     def get_serializer_class(self):
         if self.action == "list":
