@@ -30,6 +30,8 @@ from theatre.serializers import (
     TicketDetailSerializer
 )
 
+from theatre.permissions import IsAdminOrIfAuthenticatedReadOnly
+
 
 class GenreViewSet(
     mixins.CreateModelMixin,
@@ -38,6 +40,7 @@ class GenreViewSet(
 ):
     queryset = Genre.objects
     serializer_class = GenreSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
 class ActorViewSet(
@@ -47,11 +50,13 @@ class ActorViewSet(
 ):
     queryset = Actor.objects
     serializer_class = ActorSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
 class PlayViewSet(viewsets.ModelViewSet):
     queryset = Play.objects.prefetch_related("actors", "genres")
     serializer_class = PlaySerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -64,6 +69,7 @@ class PlayViewSet(viewsets.ModelViewSet):
 class TheatreHallViewSet(viewsets.ModelViewSet):
     queryset = TheatreHall.objects
     serializer_class = TheatreHallSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -76,6 +82,7 @@ class TheatreHallViewSet(viewsets.ModelViewSet):
 class PerformanceViewSet(viewsets.ModelViewSet):
     queryset = Performance.objects.select_related("play", "theatre_hall")
     serializer_class = PerformanceSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -88,6 +95,7 @@ class PerformanceViewSet(viewsets.ModelViewSet):
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.select_related("user")
     serializer_class = ReservationSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -100,6 +108,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
 class TicketViewSet(viewsets.ModelViewSet):
     queryset = Ticket.objects
     serializer_class = TicketSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get_serializer_class(self):
         if self.action == "list":
