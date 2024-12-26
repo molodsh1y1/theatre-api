@@ -104,6 +104,12 @@ class ReservationViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
 
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
     def get_serializer_class(self):
         if self.action == "list":
             return ReservationListSerializer
@@ -117,6 +123,9 @@ class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
+
+    def get_queryset(self):
+        return self.queryset.filter(reservation__user=self.request.user)
 
     def get_serializer_class(self):
         if self.action == "list":
