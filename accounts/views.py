@@ -3,9 +3,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from accounts.serializers import UserSerializer
+from accounts.models import User
 
 
-class CreteUserView(generics.CreateAPIView):
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
