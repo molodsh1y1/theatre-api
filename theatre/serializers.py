@@ -20,11 +20,23 @@ class GenreSerializer(serializers.ModelSerializer):
         fields = ("id", "name")
 
 
+class ActorImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actor
+        fields = ("id", "photo")
+
+
 class ActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actor
-        fields = ("id", "first_name", "last_name", "full_name")
+        fields = ("id", "first_name", "last_name", "full_name", "photo")
         read_only_fields = ("full_name",)
+
+
+class PlayImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Play
+        fields = ("id", "poster")
 
 
 class PlaySerializer(serializers.ModelSerializer):

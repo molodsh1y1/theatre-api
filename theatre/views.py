@@ -1,4 +1,6 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from theatre.models import (
     Genre,
@@ -12,8 +14,10 @@ from theatre.models import (
 
 from theatre.serializers import (
     GenreSerializer,
+    ActorImageSerializer,
     ActorSerializer,
     PlaySerializer,
+    PlayImageSerializer,
     PlayListSerializer,
     PlayDetailSerializer,
     TheatreHallSerializer,
@@ -45,15 +49,25 @@ class GenreViewSet(
     pagination_class = CustomPagination
 
 
-class ActorViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet
-):
+class ActorViewSet(viewsets.ModelViewSet):
     queryset = Actor.objects.all()
     serializer_class = ActorSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
+
+    def get_serializer_class(self):
+        if self.action == "upload_image":
+            return ActorImageSerializer
+        return ActorSerializer
+
+    @action(detail=True, methods=["POST"], url_path="upload-image")
+    def upload_image(self, request, pk=None):
+        actor = self.get_object()
+        serializer = self.get_serializer(actor, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PlayViewSet(viewsets.ModelViewSet):
@@ -68,7 +82,18 @@ class PlayViewSet(viewsets.ModelViewSet):
             return PlayListSerializer
         if self.action == "retrieve":
             return PlayDetailSerializer
+        if self.action == "upload_image":
+            return PlayImageSerializer
         return PlaySerializer
+
+    @action(detail=True, methods=["POST"], url_path="upload-image")
+    def upload_image(self, request, pk=None):
+        play = self.get_object()
+        serializer = self.get_serializer(play, data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TheatreHallViewSet(viewsets.ModelViewSet):

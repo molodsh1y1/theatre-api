@@ -9,6 +9,7 @@ from accounts.models import User
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = ()
 
 
 class ManageUserView(generics.RetrieveUpdateAPIView):
