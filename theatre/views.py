@@ -43,14 +43,14 @@ class GenreViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
-    queryset = Genre.objects.all()
+    queryset = Genre.objects.order_by("name")
     serializer_class = GenreSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
 
 
 class ActorViewSet(viewsets.ModelViewSet):
-    queryset = Actor.objects.all()
+    queryset = Actor.objects.order_by("last_name")
     serializer_class = ActorSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
