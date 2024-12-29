@@ -20,6 +20,7 @@ flake8-quotes = "^3.4.0"
 djangorestframework-simplejwt = "^5.3.1"
 django-debug-toolbar = "^4.4.6"
 drf-spectacular = "^0.28.0"
+pillow = "^11.0.0"
 
 
 [build-system]

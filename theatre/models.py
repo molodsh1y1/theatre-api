@@ -5,6 +5,8 @@ from django.core.validators import (
 )
 from django.conf import settings
 
+from theatre.path_utils import create_custom_path
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=63, unique=True)
@@ -16,6 +18,11 @@ class Genre(models.Model):
 class Actor(models.Model):
     first_name = models.CharField(max_length=63)
     last_name = models.CharField(max_length=63)
+    photo = models.ImageField(
+        upload_to=create_custom_path,
+        null=True,
+        blank=True
+    )
 
     class Meta:
         indexes = [
@@ -37,6 +44,11 @@ class Play(models.Model):
     description = models.TextField(null=True, blank=True)
     actors = models.ManyToManyField(Actor, related_name="plays")
     genres = models.ManyToManyField(Genre, related_name="plays")
+    poster = models.ImageField(
+        upload_to=create_custom_path,
+        null=True,
+        blank=True
+    )
 
     class Meta:
         ordering = ["title"]
