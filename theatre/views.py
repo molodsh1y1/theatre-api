@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins
 
 from theatre.models import (
@@ -99,13 +100,27 @@ class PerformanceViewSet(viewsets.ModelViewSet):
 
 
 class ReservationViewSet(viewsets.ModelViewSet):
-    queryset = Reservation.objects.select_related("user")
+    queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+        queryset = super().get_queryset()
+
+        queryset = queryset.select_related("user")
+
+        if self.action == "list":
+            return queryset.prefetch_related("tickets")
+
+        if self.action == "retrieve":
+            return queryset.prefetch_related(
+                "tickets__performance__play__actors",
+                "tickets__performance__play__genres",
+                "tickets__performance__theatre_hall"
+            )
+
+        return queryset.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -125,7 +140,13 @@ class TicketViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
 
     def get_queryset(self):
-        return self.queryset.filter(reservation__user=self.request.user)
+        queryset = super().get_queryset().select_related(
+            "performance__play",
+            "performance__theatre_hall",
+            "reservation",
+        )
+
+        return queryset.filter(reservation__user=self.request.user)
 
     def get_serializer_class(self):
         if self.action == "list":

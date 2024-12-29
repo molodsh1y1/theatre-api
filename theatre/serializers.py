@@ -24,6 +24,7 @@ class ActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actor
         fields = ("id", "first_name", "last_name", "full_name")
+        read_only_fields = ("full_name",)
 
 
 class PlaySerializer(serializers.ModelSerializer):
@@ -110,7 +111,6 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = ("id", "row", "seat", "performance", "reservation")
-        read_only_fields = ("reservation",)
 
 
 class TicketListSerializer(TicketSerializer):
