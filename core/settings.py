@@ -27,7 +27,7 @@ SECRET_KEY = get_env_variable("SECRET_KEY")
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "localhost"]
 
 
 # Application definition
@@ -85,12 +85,21 @@ WSGI_APPLICATION = "core.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
+    "dev": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+    },
+    "prod": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": get_env_variable("POSTGRES_DB"),
+        "USER": get_env_variable("POSTGRES_USER"),
+        "PASSWORD": get_env_variable("POSTGRES_PASSWORD"),
+        "HOST": get_env_variable("POSTGRES_HOST"),
+        "PORT": get_env_variable("POSTGRES_PORT"),
     }
 }
 
+DATABASES["default"] = DATABASES["dev" if DEBUG else "prod"]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
