@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+    "django_filters",
     "debug_toolbar",
     "drf_spectacular",
     "theatre",
@@ -152,6 +153,7 @@ REST_FRAMEWORK = {
        "anon": "100/day",
        "user": "1000/day"
     },
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
 }
 
 SPECTACULAR_SETTINGS = {

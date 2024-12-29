@@ -1,4 +1,3 @@
-from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins
 
 from theatre.models import (
@@ -62,6 +61,7 @@ class PlayViewSet(viewsets.ModelViewSet):
     serializer_class = PlaySerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
+    filterset_fields = ("actors", "genres")
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -76,6 +76,7 @@ class TheatreHallViewSet(viewsets.ModelViewSet):
     serializer_class = TheatreHallSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
+    filterset_fields = ("name",)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -90,6 +91,7 @@ class PerformanceViewSet(viewsets.ModelViewSet):
     serializer_class = PerformanceSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
     pagination_class = CustomPagination
+    filterset_fields = ("play", "theatre_hall", "show_time")
 
     def get_serializer_class(self):
         if self.action == "list":
