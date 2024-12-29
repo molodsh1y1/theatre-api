@@ -27,3 +27,12 @@ update: install migrate
 .PHONY: flake8
 flake8:
 	$(RUN) pflake8 .
+
+.PHONY: test
+test:
+	$(RUN) coverage run $(FILE_NAME) test
+	$(RUN) coverage report
+
+.PHONY: test-clean
+test-clean:
+	$(RUN) coverage erase
