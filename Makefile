@@ -36,3 +36,7 @@ test:
 .PHONY: test-clean
 test-clean:
 	$(RUN) coverage erase
+
+.PHOTY: isort
+isort:
+	$(RUN) isort .

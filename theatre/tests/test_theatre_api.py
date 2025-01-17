@@ -214,3 +214,77 @@ class AuthenticatedApiTests(TestCase):
         res = self.client.get(PLAY_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data["results"], [])
+
+    def test_pagination(self):
+        for _ in range(20):
+            sample_play()
+
+        res = self.client.get(PLAY_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data["results"]), 10)
+        self.assertIn("next", res.data)
+        self.assertIn("previous", res.data)
+
+
+class AdminApiTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.admin_user = get_user_model().objects.create_superuser(
+            email="admin@example.com",
+            password="adminpass",
+            is_staff=True,
+            is_superuser=True
+        )
+        self.client.force_authenticate(self.admin_user)
+
+    def test_upload_image_for_actor(self):
+        actor = sample_actor()
+        url = reverse("theatre:actor-upload-image", args=[actor.id])
+        with open("theatre/tests/sample.jpg", "rb") as image:
+            res = self.client.post(url, {"photo": image}, format="multipart")
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn("photo", res.data)
+
+    def test_upload_image_for_play(self):
+        play = sample_play()
+        url = reverse("theatre:play-upload-image", args=[play.id])
+        with open("theatre/tests/sample.jpg", "rb") as image:
+            res = self.client.post(url, {"poster": image}, format="multipart")
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn("poster", res.data)
+
+
+class ForbiddenApiTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_create_genre_forbidden(self):
+        res = self.client.post(GENRE_URL, {"name": "Genre name"})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_actor_forbidden(self):
+        res = self.client.post(ACTOR_URL, {"first_name": "First", "last_name": "Last"})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_play_forbidden(self):
+        res = self.client.post(PLAY_URL, {"title": "Play title"})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_theatre_hall_forbidden(self):
+        res = self.client.post(THEATRE_HALL_URL, {"name": "Theatre hall name", "rows": 10, "seats_in_row": 10})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_performance_forbidden(self):
+        res = self.client.post(PERFORMANCE_URL, {"play": 1, "theatre_hall": 1, "show_time": "2022-06-02 14:00:00"})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_reservation_forbidden(self):
+        res = self.client.post(RESERVATION_URL, {"tickets": [{"row": 1, "seat": 1, "performance": 1}]})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_ticket_forbidden(self):
+        res = self.client.post(TICKET_URL, {"row": 1, "seat": 1, "performance": 1, "reservation": 1})
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
