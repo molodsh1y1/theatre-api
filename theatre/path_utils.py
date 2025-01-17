@@ -1,8 +1,10 @@
 import os
 import uuid
 
+from django.db.models import Model
 
-def create_custom_path(instance, filename):
+
+def create_custom_path(instance: Model, filename: str) -> str:
     """
     Generate a custom path for uploaded
     images based on the model class name and

@@ -25,6 +25,7 @@ coverage = "^7.6.10"
 gunicorn = "^23.0.0"
 psycopg2-binary = "^2.9.10"
 isort = "^5.13.2"
+flake8-annotations = "^3.1.1"
 
 
 [build-system]
@@ -34,8 +35,10 @@ build-backend = "poetry.core.masonry.api"
 [tool.flake8]
 max-line-length = 79
 inline-quotes = "double"
-exclude = [".venv", ".git", "__pycache__", "migrations", "settings.py"]
+exclude = [".venv", ".git", "__pycache__", "migrations", "settings.py", "tests.py"]
 extend-ignore = ["E203"]
+plugins = ["flake8-annotations"]
+ignore = ["ANN101", "ANN102"]
 
 [tool.isort]
 multi_line_output = 3

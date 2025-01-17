@@ -1,4 +1,5 @@
 import time
+from typing import Any
 
 from django.core.management.base import BaseCommand
 from django.db import connections
@@ -6,7 +7,7 @@ from django.db.utils import OperationalError
 
 
 class Command(BaseCommand):
-    def handle(self, *args, **options):
+    def handle(self, *args: Any, **options: dict) -> None:
         self.stdout.write("Waiting for database...")
         db_conn = None
         while not db_conn:
