@@ -1,12 +1,12 @@
 from django.urls import path
-
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
-    TokenVerifyView
+    TokenVerifyView,
 )
 
 from accounts.views import CreateUserView, ManageUserView
+
 
 app_name = "accounts"
 

@@ -1,41 +1,39 @@
-from rest_framework import viewsets, mixins, status
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from theatre.models import (
-    Genre,
     Actor,
-    Play,
-    TheatreHall,
+    Genre,
     Performance,
+    Play,
     Reservation,
-    Ticket
+    TheatreHall,
+    Ticket,
 )
-
+from theatre.pagination import CustomPagination
+from theatre.permissions import IsAdminOrIfAuthenticatedReadOnly
 from theatre.serializers import (
-    GenreSerializer,
     ActorImageSerializer,
     ActorSerializer,
-    PlaySerializer,
+    GenreSerializer,
+    PerformanceDetailSerializer,
+    PerformanceListSerializer,
+    PerformanceSerializer,
+    PlayDetailSerializer,
     PlayImageSerializer,
     PlayListSerializer,
-    PlayDetailSerializer,
-    TheatreHallSerializer,
-    TheatreHallListSerializer,
-    TheatreHallDetailSerializer,
-    PerformanceSerializer,
-    PerformanceListSerializer,
-    PerformanceDetailSerializer,
-    ReservationSerializer,
-    ReservationListSerializer,
+    PlaySerializer,
     ReservationDetailSerializer,
-    TicketSerializer,
+    ReservationListSerializer,
+    ReservationSerializer,
+    TheatreHallDetailSerializer,
+    TheatreHallListSerializer,
+    TheatreHallSerializer,
+    TicketDetailSerializer,
     TicketListSerializer,
-    TicketDetailSerializer
+    TicketSerializer,
 )
-
-from theatre.permissions import IsAdminOrIfAuthenticatedReadOnly
-from theatre.pagination import CustomPagination
 
 
 class GenreViewSet(

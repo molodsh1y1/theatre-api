@@ -1,17 +1,16 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from theatre.models import (
-    Genre,
-    Actor,
-    Play,
-    TheatreHall,
-    Performance,
-    Reservation,
-    Ticket
-)
-
 from accounts.serializers import UserSerializer
+from theatre.models import (
+    Actor,
+    Genre,
+    Performance,
+    Play,
+    Reservation,
+    TheatreHall,
+    Ticket,
+)
 
 
 class GenreSerializer(serializers.ModelSerializer):

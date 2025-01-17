@@ -3,24 +3,17 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-
-from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.test import APIClient
 
-from theatre.models import (
-    Genre,
-    Actor,
-    Play,
-    TheatreHall,
-    Performance
-)
-
+from theatre.models import Actor, Genre, Performance, Play, TheatreHall
 from theatre.serializers import (
-    GenreSerializer,
     ActorSerializer,
-    PlayListSerializer,
+    GenreSerializer,
     PlayDetailSerializer,
+    PlayListSerializer,
 )
+
 
 GENRE_URL = reverse("theatre:genre-list")
 ACTOR_URL = reverse("theatre:actor-list")
