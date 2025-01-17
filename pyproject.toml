@@ -24,6 +24,7 @@ pillow = "^11.0.0"
 coverage = "^7.6.10"
 gunicorn = "^23.0.0"
 psycopg2-binary = "^2.9.10"
+isort = "^5.13.2"
 
 
 [build-system]
@@ -35,3 +36,12 @@ max-line-length = 79
 inline-quotes = "double"
 exclude = [".venv", ".git", "__pycache__", "migrations", "settings.py"]
 extend-ignore = ["E203"]
+
+[tool.isort]
+multi_line_output = 3
+line_length = 79
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+lines_after_imports = 2
+exclude = [".venv", ".git", "__pycache__", "migrations", "settings.py"]
