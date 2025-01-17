@@ -11,8 +11,8 @@ from drf_spectacular.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api-theatre/", include("theatre.urls", namespace="theatre")),
-    path("api-accounts/", include("accounts.urls", namespace="accounts")),
+    path("api/theatre/", include("theatre.urls", namespace="theatre")),
+    path("api/accounts/", include("accounts.urls", namespace="accounts")),
     path(
         "api/doc/",
         SpectacularAPIView.as_view(),

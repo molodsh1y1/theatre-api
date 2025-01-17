@@ -24,6 +24,4 @@ router.register("reservations", ReservationViewSet, basename="reservation")
 router.register("tickets", TicketViewSet, basename="ticket")
 
 
-urlpatterns = [
-    path("", include(router.urls))
-]
+urlpatterns = router.urls
