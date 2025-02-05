@@ -37,6 +37,14 @@ test:
 test-clean:
 	$(RUN) coverage erase
 
-.PHOTY: isort
+.PHONY: isort
 isort:
 	$(RUN) isort .
+
+.PHONY: docker-compose up build
+up build:
+	docker-compose up --build
+
+.PHONY: docker-compose down
+down:
+	docker-compose down

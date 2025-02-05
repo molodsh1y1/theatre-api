@@ -29,4 +29,5 @@ urlpatterns = [
         name="redoc"
     ),
     path("__debug__/", include("debug_toolbar.urls")),
+    path("health_check/", include("health_check.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

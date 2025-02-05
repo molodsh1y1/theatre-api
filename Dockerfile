@@ -3,6 +3,8 @@ FROM python:3.12-alpine
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+RUN apk --no-cache add curl
+
 RUN pip install poetry==1.8.5
 
 ENV POETRY_NO_INTERACTION=1 \

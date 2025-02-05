@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = get_env_variable("SECRET_KEY")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True
+DEBUG = get_env_variable("DEBUG") == "True"
 
 ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "localhost"]
 
@@ -47,6 +47,11 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "theatre",
     "accounts",
+    "health_check",
+    "health_check.db",
+    "health_check.cache",
+    "health_check.storage",
+    "health_check.contrib.migrations",
 ]
 
 MIDDLEWARE = [
@@ -179,7 +184,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 SIMPLE_JWT = {
-   "ACCESS_TOKEN_LIFETIME": timedelta(minutes=700),
+   "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
    "ROTATE_REFRESH_TOKENS": True
 }
