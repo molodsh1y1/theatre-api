@@ -35,7 +35,7 @@ jobs:
           poetry install
 
       - name: Run flake8
-        run: poetry run flake8 .
+        run: poetry run pflake8 .
 
       - name: Run migrations and tests
         run: |
