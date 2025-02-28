@@ -28,11 +28,11 @@ class PlayAdmin(admin.ModelAdmin):
     list_display = ("title", "description", "get_actors", "get_genres")
     list_filter = ("title", "actors", "genres")
 
-    def get_actors(self, obj):
+    def get_actors(self, obj) -> str:
         return ", ".join([actor.__str__() for actor in obj.actors.all()[:3]])
     get_actors.short_description = "Actors"
 
-    def get_genres(self, obj):
+    def get_genres(self, obj) -> str:
         return ", ".join([genre.name for genre in obj.genres.all()[:3]])
     get_genres.short_description = "Genres"
 

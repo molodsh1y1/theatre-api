@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -25,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = get_env_variable("SECRET_KEY")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = get_env_variable("DEBUG") == "True"
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "localhost"]
 
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     "django_filters",
     "debug_toolbar",
     "drf_spectacular",
+    "drf_spectacular_sidecar",
     "theatre",
     "accounts",
     "health_check",
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     "health_check.cache",
     "health_check.storage",
     "health_check.contrib.migrations",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -136,12 +139,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = "static/"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -167,7 +164,11 @@ REST_FRAMEWORK = {
        "anon": "100/day",
        "user": "1000/day"
     },
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
@@ -222,5 +223,28 @@ JAZZMIN_UI_TWEAKS = {
     "actions_sticky_top": False
 }
 
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
+AWS_ACCESS_KEY_ID = get_env_variable("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = get_env_variable("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = get_env_variable("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = get_env_variable("AWS_S3_REGION_NAME")
+AWS_S3_FILE_OVERWRITE = False
+AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "location": "media",
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "location": "static",
+        },
+    },
+}
+
+MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/media/"
+STATIC_URL = f"{AWS_S3_CUSTOM_DOMAIN}/static/"

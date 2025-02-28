@@ -1,6 +1,7 @@
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.request import Request
 
 from theatre.models import (
     Actor,
@@ -59,7 +60,7 @@ class ActorViewSet(viewsets.ModelViewSet):
         return ActorSerializer
 
     @action(detail=True, methods=["POST"], url_path="upload-image")
-    def upload_image(self, request, pk=None):
+    def upload_image(self, request: Request, pk: int = None):
         actor = self.get_object()
         serializer = self.get_serializer(actor, data=request.data)
 
@@ -85,7 +86,7 @@ class PlayViewSet(viewsets.ModelViewSet):
         return PlaySerializer
 
     @action(detail=True, methods=["POST"], url_path="upload-image")
-    def upload_image(self, request, pk=None):
+    def upload_image(self, request: Request, pk: int = None):
         play = self.get_object()
         serializer = self.get_serializer(play, data=request.data)
 
@@ -147,7 +148,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
         return queryset.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: ReservationSerializer):
         serializer.save(user=self.request.user)
 
     def get_serializer_class(self):
